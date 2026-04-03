@@ -125,8 +125,8 @@ public final class TPPosCommand extends BaseCommand {
             return CoordinateResolver.resolve(base, world, x, y, z);
         } catch (IllegalArgumentException ex) {
             String message = feature.plugin().configs().messages().getString(
-                "messages.admin-invalid-coordinates",
-                "<red>Invalid coordinates. Use numbers or relative coordinates like <gold>~ ~1 ~-5</gold>."
+                    "messages.admin-invalid-coordinates",
+                    "<red>Invalid coordinates. Use numbers or relative coordinates like <gold>~ ~1 ~-5</gold>."
             );
             messageDispatcher.sendWithKey(sender, "messages.admin-invalid-coordinates", message);
             return null;
@@ -135,10 +135,10 @@ public final class TPPosCommand extends BaseCommand {
 
     private String format(String template, Location destination) {
         return template
-            .replace("%x%", formatCoord(destination.getX()))
-            .replace("%y%", formatCoord(destination.getY()))
-            .replace("%z%", formatCoord(destination.getZ()))
-            .replace("%world%", destination.getWorld() != null ? destination.getWorld().getName() : "unknown");
+                .replace("%x%", formatCoord(destination.getX()))
+                .replace("%y%", formatCoord(destination.getY()))
+                .replace("%z%", formatCoord(destination.getZ()))
+                .replace("%world%", destination.getWorld() != null ? destination.getWorld().getName() : "unknown");
     }
 
     private String formatCoord(double value) {

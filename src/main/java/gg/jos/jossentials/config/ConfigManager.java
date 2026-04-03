@@ -17,6 +17,7 @@ public final class ConfigManager {
     private FileConfiguration spawn;
     private FileConfiguration warps;
     private FileConfiguration admin;
+    private FileConfiguration fly;
     private FileConfiguration messages;
     private FileConfiguration qol;
 
@@ -34,6 +35,7 @@ public final class ConfigManager {
         spawn = loadConfig("spawn.yml", "spawn");
         warps = loadConfig("warps.yml", "warps");
         admin = loadConfig("admin.yml", "admin");
+        fly = loadConfig("fly.yml", "fly");
         messages = loadConfig("messages.yml", "messages");
         qol = loadConfig("qol.yml", "qol");
     }
@@ -48,6 +50,7 @@ public final class ConfigManager {
         spawn = loadConfig("spawn.yml", "spawn");
         warps = loadConfig("warps.yml", "warps");
         admin = loadConfig("admin.yml", "admin");
+        fly = loadConfig("fly.yml", "fly");
         messages = loadConfig("messages.yml", "messages");
         qol = loadConfig("qol.yml", "qol");
     }
@@ -82,6 +85,10 @@ public final class ConfigManager {
 
     public FileConfiguration admin() {
         return admin;
+    }
+
+    public FileConfiguration fly() {
+        return fly;
     }
 
     public FileConfiguration messages() {

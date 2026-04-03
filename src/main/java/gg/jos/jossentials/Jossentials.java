@@ -6,6 +6,7 @@ import gg.jos.jossentials.db.Database;
 import gg.jos.jossentials.command.ReloadCommand;
 import gg.jos.jossentials.config.ConfigManager;
 import gg.jos.jossentials.feature.FeatureManager;
+import gg.jos.jossentials.fly.FlyFeature;
 import gg.jos.jossentials.homes.feature.HomesFeature;
 import gg.jos.jossentials.qol.feature.QOLFeature;
 import gg.jos.jossentials.spawn.SpawnFeature;
@@ -14,7 +15,6 @@ import gg.jos.jossentials.util.MessageDispatcher;
 import gg.jos.jossentials.util.SchedulerAdapter;
 import gg.jos.jossentials.warps.feature.WarpsFeature;
 import gg.jos.jossentials.workbenches.WorkbenchesFeature;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Jossentials extends JavaPlugin {
@@ -34,7 +34,6 @@ public final class Jossentials extends JavaPlugin {
             database.initialize();
         } catch (Exception ex) {
             getLogger().severe("Failed to initialize database: " + ex.getMessage());
-            Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
 
@@ -42,6 +41,7 @@ public final class Jossentials extends JavaPlugin {
         PaperCommandManager commandManager = new PaperCommandManager(this);
         featureManager = new FeatureManager();
         featureManager.register(new AdminFeature(this, database, commandManager, messageDispatcher));
+        featureManager.register(new FlyFeature(this, commandManager, messageDispatcher));
         featureManager.register(new HomesFeature(this, database, commandManager, messageDispatcher));
         featureManager.register(new SpawnFeature(this, commandManager, messageDispatcher));
         featureManager.register(new TPAFeature(this, commandManager, messageDispatcher));
@@ -70,4 +70,5 @@ public final class Jossentials extends JavaPlugin {
     public SchedulerAdapter scheduler() {
         return scheduler;
     }
+
 }

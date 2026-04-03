@@ -1,0 +1,7 @@
+# fly configuration
+fly:
+  commands:
+    fly:
+      aliases:
+        - fly
+        - jfly

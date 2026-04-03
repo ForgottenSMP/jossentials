@@ -10,6 +10,7 @@ config-files:
   - warps.yml
   - workbenches.yml
   - admin.yml
+  - fly.yml
   - messages.yml
   - qol.yml
 
@@ -66,6 +67,9 @@ features:
     enabled: true
   admin:
     # enable or disable admin utility commands
+    enabled: true
+  fly:
+    # enable or disable the fly feature
     enabled: true
   qol:
     # enable or disable qol commands

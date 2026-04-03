@@ -70,6 +70,7 @@ public final class AdminFeature implements Feature, Listener {
             commandManager.getCommandCompletions().registerCompletion("seenplayers", context -> seenPlayerNames());
             commandManager.getCommandCompletions().registerCompletion("adminspeedtypes", context -> List.of("walk", "fly"));
             commandManager.getCommandCompletions().registerCompletion("adminspeedvalues", context -> speedValues());
+            commandManager.getCommandCompletions().registerCompletion("admintpposcoords", context -> tpPosCoordinateSuggestions());
             commandsRegistered = true;
         }
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -162,5 +163,9 @@ public final class AdminFeature implements Feature, Listener {
             values.add(String.valueOf(i));
         }
         return values;
+    }
+
+    private List<String> tpPosCoordinateSuggestions() {
+        return List.of("~", "~1", "~-1", "0", "100", "-100");
     }
 }
