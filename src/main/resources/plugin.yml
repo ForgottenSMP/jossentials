@@ -1,7 +1,7 @@
 name: Jossentials
 version: '${version}'
 main: gg.jos.jossentials.Jossentials
-api-version: '1.21'
+api-version: '26.2'
 authors: [ JosTheDude ]
 description:  A modular, configurable, and extremely intuitive all-in-one command core for awesome servers.
 website: https://jos.gg/
@@ -205,3 +205,10 @@ permissions:
 libraries:
   - org.xerial:sqlite-jdbc:3.51.1.0
   - com.mysql:mysql-connector-j:9.6.0
+  # ACF's built-in "@players" completion (BukkitCommandCompletions) calls
+  # org.apache.commons.lang.Validate.notNull - that is commons-lang 2.x, not
+  # commons-lang3. Paper 26.2 ships only org.apache.commons:commons-lang3 on the
+  # server classpath (its paperclip libraries.list is empty and the Mojang bundler
+  # list contains commons-lang3 only), so without this the first tab-complete of
+  # any player argument throws NoClassDefFoundError: org/apache/commons/lang/Validate.
+  - commons-lang:commons-lang:2.6

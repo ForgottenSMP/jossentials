@@ -1,8 +1,12 @@
 package gg.jos.jossentials.util;
 
+import net.kyori.adventure.key.InvalidKeyException;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.command.CommandSender;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -136,15 +140,49 @@ public final class MessageDispatcher {
         if (name == null || name.isEmpty() || "none".equalsIgnoreCase(name)) {
             return new SoundEntry(null, 1.0f, 1.0f, false);
         }
-        Sound sound;
-        try {
-            sound = Sound.valueOf(name.toUpperCase(Locale.ROOT));
-        } catch (IllegalArgumentException ex) {
+        Sound sound = resolveSoundByName(name);
+        if (sound == null) {
             return null;
         }
         float volume = (float) section.getDouble("volume", 1.0);
         float pitch = (float) section.getDouble("pitch", 1.0);
         return new SoundEntry(sound, volume, pitch, true);
+    }
+
+    /**
+     * Resolves a configured sound name. As of MC 26.2 {@code org.bukkit.Sound} is a registry-backed
+     * interface rather than an enum, so the registry is the primary lookup. Legacy enum-style names
+     * (e.g. {@code ENTITY_EXPERIENCE_ORB_PICKUP}) that existing configs use are still accepted.
+     */
+    private Sound resolveSoundByName(String name) {
+        String trimmed = name.trim();
+
+        // Namespaced / minecraft-id form, e.g. "entity.experience_orb.pickup" or "minecraft:ui.button.click".
+        try {
+            Sound registrySound = Registry.SOUNDS.get(Key.key(trimmed.toLowerCase(Locale.ROOT)));
+            if (registrySound != null) {
+                return registrySound;
+            }
+        } catch (InvalidKeyException ignored) {
+            // not a key, fall through to the legacy constant form
+        }
+
+        // Legacy Bukkit constant form, e.g. "ENTITY_EXPERIENCE_ORB_PICKUP".
+        String constant = trimmed.toUpperCase(Locale.ROOT).replace('.', '_').replace(':', '_');
+        for (Sound candidate : Registry.SOUNDS) {
+            if (constant.equals(soundConstantName(candidate))) {
+                return candidate;
+            }
+        }
+        return null;
+    }
+
+    private String soundConstantName(Sound sound) {
+        NamespacedKey key = Registry.SOUNDS.getKey(sound);
+        if (key == null) {
+            return null;
+        }
+        return key.getKey().toUpperCase(Locale.ROOT).replace('.', '_');
     }
 
     private SoundEntry resolveSound(SoundSettings settings, String messageKey) {
